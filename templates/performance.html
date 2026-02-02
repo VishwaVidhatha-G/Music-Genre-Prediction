@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+		<!--featured-cars start -->
+		<section id="new-cars" class="featured-cars"  style="background-color: white;">
+			<div class="container">
+				<div class="section-header">
+					<p> Music <span> Genre</span> App</p>
+					<h2>Music Genre Performance</h2>
+				</div><!--/.section-header-->
+				<div class="featured-cars-content">
+					<div class="row">
+						<div class="col-lg-4 col-md-4 col-sm-4">
+							<div class="single-featured-cars">
+								<div class="featured-img-box">
+									<div class="featured-cars-img">
+										<img src="static/images/per/accuracy.jpg" alt="cars">
+									</div>
+									<div class="featured-model-info" >
+										<p style="color: black;">Accuracy % Score: 99.55 %
+										</p>
+									</div>
+								</div>
+								<div class="featured-cars-txt">
+									<h2><a style="color: black;">Accuracy <span></span></a></h2>
+									<h3></h3>
+									<p style="color: white;">
+										Accuracy refers to a performance metric that measures the model's ability to correctly classify instances within 
+										a given dataset. It is calculated as the ratio of correctly predicted instances to the total number of instances 
+										in the dataset. In other words, accuracy provides an indication of the model's overall correctness in making predictions. 
+									</p>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-4 col-md-4 col-sm-4">
+							<div class="single-featured-cars">
+								<div class="featured-img-box">
+									<div class="featured-cars-img">
+										<img src="static/images/per/validation.jpg"  alt="cars">
+									</div>
+									<div class="featured-model-info">
+										<p style="color: black;">Validation % Score: 92.21 %
+										</p>
+									</div>
+								</div>
+								<div class="featured-cars-txt">
+									<h2><a style="color: black;">Validation <span></span></a></h2>
+									<h3></h3>
+									<p style="color: white;">
+										Validation is a technique to evaluate the performance of models during learning. 
+										It is done by separating the data set into training and validating sets and then evaluating the performance 
+										of the model (deep neural network in this case) on the validation sets. 
+									</p>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-4 col-md-4 col-sm-4">
+							<div class="single-featured-cars">
+								<div class="featured-img-box">
+									<div class="featured-cars-img">
+										<img src="static/images/per/performance.jpg" alt="cars">
+									</div>
+									<div class="featured-model-info">
+										<p style="color: black;">Performance </p>
+									</div>
+								</div>
+								<div class="featured-cars-txt">
+									<h2><a style="color: black;">Preformance <span></span></a></h2>
+									<h3></h3>
+									<p style="color: white;">
+										Performance refers to the ability of a neural network model to accurately 
+										and efficiently accomplish a specific task, such as classification or regression, 
+										based on its training and testing data.
+									</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div><!--/.container-->
+
+		</section><!--/.featured-cars-->
+		<!--featured-cars end -->
+
+
+{% endblock %}

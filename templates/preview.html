@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}Preview{% endblock %}
+
+{% block content %}
+
+		<section id="new-cars" class="new-cars" style="background-color: white;">
+			<div class="container"  style="background-color: white;">
+				<div class="section-header">
+					<p> Music <span> Genre</span> App</p>
+					<h2>Dataset Preview</h2>
+				</div>
+				<div class="new-cars-content">
+					<div class="owl-carousel owl-theme" id="new-cars-carousel">
+						
+						<div class="new-cars-item">
+							<div class="single-new-cars-item">
+								<div class="">
+									<div class="" style="overflow: scroll; max-height: 500px; max-width: 1500px; color: white;">
+										<div >{{ df_view.to_html(classes="table striped",na_rep="-") | safe}}</div>
+									</div>
+									<br>
+									<br>
+									<div class="form-group" style="padding:0px 250px 10px 40px;height:200px">
+										<input style="margin-left:350px" type="button" onclick="hideLoader()" class="btn btn-primary" value="Click to Train | Test" />
+										<div id="loading" style="display:None;margin-top:552950px">
+										</div>
+									</div>
+									</br>
+									<script type='text/javascript'>
+										function hideLoader() {  
+										$('#loading').show(0).delay(10000).hide(0,function(){
+											alert("Training finished!");
+											window.location = "{{url_for('genre_prediction')}}";
+										});    
+										}
+									</script>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</section>
+
+{% endblock %}

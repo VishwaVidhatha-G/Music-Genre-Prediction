@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}Upload{% endblock %}
+
+{% block content %}
+
+		<section id="new-cars" class="new-cars" style="background-color: white;">
+			<div class="container"  style="background-color: white;">
+				<div class="section-header">
+					<p> Music <span> Genre</span> App</p>
+					<h2>Music Genre Detection</h2>
+				</div>
+				<div class="new-cars-content">
+					<div class="owl-carousel owl-theme" id="new-cars-carousel">
+						
+						<div class="new-cars-item" >
+							<div class="single-new-cars-item">
+								<div class="row">
+									<div class="col-md-7 col-sm-12">
+										<div class="new-cars-img">
+											<img src="static/images/prediction.png" style="width: 500px; height: 500px;" alt="img"/>
+										</div>
+									</div>
+									<div class="col-md-5 col-sm-12">
+										<div class="new-cars-txt" style="padding-top: 100px; color: white;">
+											<h2><a >Upload Music File</a></h2>
+                                            <form action="/predict" method="post" enctype="multipart/form-data">
+                                                <input type="file" id="wavfile" name="wavfile" accept=".wav" required>
+                                                <input type="submit" class="welcome-btn new-cars-btn" value="Detect">
+                                            </form>
+											<br>
+											
+											{% if prediction %}
+											<div class="" >   
+												<audio controls><source src="{{ audio_path}}" type="audio/wav" ></audio>
+											</div>                                             
+											</br>
+											</br>
+											<div  >Music Genre is    : <h3 class="welcome-btn new-cars-btn" style="color: white;"> {{prediction}} </h3> </div>
+											{% endif %}
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</section>
+
+{% endblock %}

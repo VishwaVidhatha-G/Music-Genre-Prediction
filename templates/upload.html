@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Upload{% endblock %}
+
+{% block content %}
+
+		<section id="new-cars" class="new-cars" style="background-color: white;">
+			<div class="container"  style="background-color: white;">
+				<div class="section-header">
+					<p> Music <span> Genre</span> App</p>
+					<h2>Dataset Preview</h2>
+				</div>
+				<div class="new-cars-content">
+					<div class="owl-carousel owl-theme" id="new-cars-carousel">
+						
+						<div class="new-cars-item" >
+							<div class="single-new-cars-item">
+								<div class="row">
+									<div class="col-md-7 col-sm-12">
+										<div class="new-cars-img">
+											<img src="static/images/upload.jpg" style="width: 500px; height: 500px;" alt="img"/>
+										</div>
+									</div>
+									<div class="col-md-5 col-sm-12">
+										<div class="new-cars-txt" style="padding-top: 100px; color: white;">
+											<h2><a >Upload</a></h2>
+                                            <form action="/preview" method="post" enctype="multipart/form-data">
+                                                <input type="file" id="datasetfile" name="datasetfile" accept=".csv" required>
+                                                <input type="submit" class="welcome-btn new-cars-btn" value="Upload">
+                                            </form>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</section>
+
+{% endblock %}
