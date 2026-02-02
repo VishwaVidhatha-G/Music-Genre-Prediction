@@ -3,7 +3,7 @@
 A professional Deep Learning project that identifies music genres from audio files (WAV/MP3) using a Convolutional Neural Network (CNN).
 
 ## 🚀 Live Demo
-coming soon
+https://music-genre-prediction-pmq2.onrender.com/
 
 ## 🛠️ Features
 * **Dual Format Support:** Accepts both .wav and .mp3 files.
