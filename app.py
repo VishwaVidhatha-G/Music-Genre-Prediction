@@ -121,38 +121,34 @@ def predicts(image_data, model):
 
 @app.route('/predict', methods=['GET', 'POST'])
 def predict():
-    # 1. Get the file from the website
+    # --- NEW PART: This stops the crash by making the folder ---
+    if not os.path.exists('static/tests/'):
+        os.makedirs('static/tests/')
+    # -----------------------------------------------------------
+
     audio_file = request.files['audiofile']
-    
-    # 2. Save the original file (MP3 or WAV) to the tests folder
     m_path = os.path.join('static/tests/', secure_filename(audio_file.filename))
     audio_file.save(m_path)
     
-    # 3. Handle MP3 or WAV conversion
-    # We use from_file because it handles both formats easily
-# Check if the file is an MP3
     if m_path.lower().endswith(".mp3"):
-    # Convert MP3 to WAV using pydub
         sound = AudioSegment.from_mp3(m_path)
         sound.export("static/temp_converted.wav", format="wav")
-    # Load the newly created WAV file
         wav = AudioSegment.from_wav("static/temp_converted.wav")
     else:
-    # It is already a WAV, load it normally
         wav = AudioSegment.from_wav(m_path)
 
-# Now take the 10-second clip (from 40s to 50s)
     relevant_segment = wav[40 * 1000: 50 * 1000]
     relevant_segment.export("static/extracted.wav", format="wav")
 
-    # 5. Create the Mel Spectrogram (The Image for the AI)
     y, sr = librosa.load('static/extracted.wav', duration=3)
     mels = librosa.feature.melspectrogram(y=y, sr=sr)
-    plt.Figure()
+    
+    # --- NEW PART: This makes the picture saving safe ---
+    plt.clf() # This clears the "drawing board"
     plt.imshow(librosa.power_to_db(mels, ref=np.max))
-    plt.savefig('static/melspectrogram.png')    
+    plt.savefig('static/melspectrogram.png')
+    # ----------------------------------------------------
 
-    # 6. Feed the image to the AI model
     image_data = load_img('static/melspectrogram.png', color_mode='rgba', target_size=(288, 432))
     class_label, prediction = predicts(image_data, model)
     genre = class_labels[class_label]
