@@ -20,7 +20,9 @@ from pydub import AudioSegment
 from tensorflow.keras.layers import Input, Add, Dense, Activation, ZeroPadding2D, BatchNormalization, Flatten, Conv2D, AveragePooling2D, MaxPooling2D, GlobalMaxPooling2D,Dropout
 from tensorflow.keras.initializers import glorot_uniform
 import time
-
+import tensorflow as tf
+tf.config.threading.set_inter_op_parallelism_threads(1)
+tf.config.threading.set_intra_op_parallelism_threads(1)
 
 app = Flask(__name__) 
 
