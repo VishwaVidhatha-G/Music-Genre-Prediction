@@ -1,3 +1,6 @@
+import static_ffmpeg
+static_ffmpeg.add_paths()
+# ... then your existing imports continue below ...
 from flask import Flask, request, jsonify, render_template, redirect, flash, send_file
 import numpy as np
 import pandas as pd
