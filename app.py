@@ -121,15 +121,17 @@ def predicts(image_data, model):
 
 @app.route('/predict', methods=['GET', 'POST'])
 def predict():
-    # --- NEW PART: This stops the crash by making the folder ---
+    # --- STEP A: This makes the folder so the app doesn't crash ---
     if not os.path.exists('static/tests/'):
         os.makedirs('static/tests/')
     # -----------------------------------------------------------
 
+    # 1. Get the music file
     audio_file = request.files['audiofile']
     m_path = os.path.join('static/tests/', secure_filename(audio_file.filename))
     audio_file.save(m_path)
     
+    # 2. Handle MP3 or WAV
     if m_path.lower().endswith(".mp3"):
         sound = AudioSegment.from_mp3(m_path)
         sound.export("static/temp_converted.wav", format="wav")
@@ -137,18 +139,21 @@ def predict():
     else:
         wav = AudioSegment.from_wav(m_path)
 
+    # 3. Take the 10-second clip
     relevant_segment = wav[40 * 1000: 50 * 1000]
     relevant_segment.export("static/extracted.wav", format="wav")
 
+    # 4. Create the Mel Spectrogram (The Image for the AI)
     y, sr = librosa.load('static/extracted.wav', duration=3)
     mels = librosa.feature.melspectrogram(y=y, sr=sr)
     
-    # --- NEW PART: This makes the picture saving safe ---
-    plt.clf() # This clears the "drawing board"
+    # --- STEP B: This clears the drawing board before saving ---
+    plt.clf() 
     plt.imshow(librosa.power_to_db(mels, ref=np.max))
     plt.savefig('static/melspectrogram.png')
     # ----------------------------------------------------
 
+    # 5. Feed the image to the AI model
     image_data = load_img('static/melspectrogram.png', color_mode='rgba', target_size=(288, 432))
     class_label, prediction = predicts(image_data, model)
     genre = class_labels[class_label]
