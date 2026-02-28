@@ -117,35 +117,43 @@ def predicts(image_data, model):
 
 @app.route('/predict', methods=['GET', 'POST'])
 def predict():
-    audio_path = request.files['wavfile']
-    print("audio_path", audio_path)
+    # 1. Create the folder if it's missing (The Self-Healing Fix)
+    if not os.path.exists('static/tests/'):
+        os.makedirs('static/tests/')
 
-    # securedfile = audio_path.filename
-    # print("securedfile", securedfile)
+    audio_file = request.files['audiofile']
+    m_path = os.path.join('static/tests/', secure_filename(audio_file.filename))
+    audio_file.save(m_path)
+    
+    # --- NEW: This part detects if it's an MP3 or WAV ---
+    if m_path.lower().endswith(".mp3"):
+        # Use from_file for MP3s (Needs static-ffmpeg installed)
+        sound = AudioSegment.from_file(m_path)
+        sound.export("static/temp_converted.wav", format="wav")
+        wav = AudioSegment.from_wav("static/temp_converted.wav")
+    else:
+        # It's already a WAV, load it normally
+        wav = AudioSegment.from_wav(m_path)
+    # ---------------------------------------------------
 
-    input_mp3_file = "input.wav"
-    m_path = os.path.join('static/tests/', secure_filename(audio_path.filename))
-    print("m_path:", m_path)
-    audio_path.save(m_path)
-    time.sleep(6)
-
-    wav = AudioSegment.from_wav(m_path)
+    # 3. Take the 10-second clip (40s to 50s)
     relevant_segment = wav[40 * 1000: 50 * 1000]
-    relevant_segment.export("static/extracted.wav", format='wav')
+    relevant_segment.export("static/extracted.wav", format="wav")
 
-    y,sr = librosa.load('static/extracted.wav', duration=3)
-    mels = librosa.feature.melspectrogram(y=y,sr=sr)
-    fig = plt.Figure()
-    canvas = FigureCanvas(fig)
-    p = plt.imshow(librosa.power_to_db(mels,ref=np.max))
-    plt.savefig('static/melspectrogram.png')    
+    # 4. Generate the Spectrogram (The Safety Fix)
+    plt.clf() # Clear the old drawing to save memory
+    y, sr = librosa.load('static/extracted.wav', duration=3)
+    mels = librosa.feature.melspectrogram(y=y, sr=sr)
+    plt.imshow(librosa.power_to_db(mels, ref=np.max))
+    plt.axis('off') # Hide the numbers for a cleaner image
+    plt.savefig('static/melspectrogram.png', bbox_inches='tight', pad_inches=0)    
 
-    image_data = load_img('static/melspectrogram.png',color_mode='rgba',target_size=(288,432)) # Image.open('static/melspectrogram.png')
+    # 5. Predict the Genre
+    image_data = load_img('static/melspectrogram.png', color_mode='rgba', target_size=(288, 432))
     class_label, prediction = predicts(image_data, model)
     genre = class_labels[class_label]
-    print("predict_result:", genre)
+    
     return render_template("genre_prediction.html", prediction=genre, audio_path=m_path)
-
 
 @app.route('/chart')
 def chart():
