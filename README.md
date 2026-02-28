@@ -5,6 +5,11 @@ A professional Deep Learning project that identifies music genres from audio fil
 ## 🚀 Live Demo
 https://music-genre-prediction-pmq2.onrender.com/
 
+## 📊 Dataset Information
+The full dataset used for training this model is included in this repository:
+- .renderignore -> **File:** `Data Set of Different Genres.csv` (approx. 4.6GB) 
+
+
 ## 🛠️ Features
 * **Dual Format Support:** Accepts both .wav and .mp3 files.
 * **Visual Analysis:** Generates a Mel Spectrogram for every upload.
