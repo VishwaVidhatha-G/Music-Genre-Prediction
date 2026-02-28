@@ -1,3 +1,4 @@
+from flask_compress import Compress
 from flask import Flask, request, jsonify, render_template, redirect, flash, send_file
 import numpy as np
 import pandas as pd
@@ -20,12 +21,12 @@ import time
 
 
 app = Flask(__name__) 
-
+Compress(app)
 
 @app.route('/')
 @app.route('/index')
 def index():
-	return render_template('index.html')
+    return render_template('genre_prediction.html') # This makes it the landing page
 
 @app.route('/login')
 def login():
