@@ -1,12 +1,16 @@
-flask==2.2.5
-flask-compress
-numpy==1.23.5
-pandas==2.0.0
-tensorflow-cpu==2.12.0
-librosa==0.10.1
-pillow==9.5.0
-pydub==0.24.1
-matplotlib==3.7.1
-static-ffmpeg
-werkzeug
-gunicorn
+pip install pandas==2.0.0
+pip install numpy==1.23.5
+pip install tensorflow==2.12.0
+pip install librosa==0.10.1
+pip install Pillow==9.5.0
+pip install pydub==0.24.1
+pip install scikit-learn==1.2.2
+pip install seaborn==0.12.2
+pip install matplotlib==3.7.1
+
+pip install Flask==2.2.5
+
+python 3.8
+
+
+
