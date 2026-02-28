@@ -25,14 +25,16 @@
 										<div class="new-cars-txt" style="padding-top: 100px; color: white;">
 											<h2><a >Upload Music File</a></h2>
                                             <form action="/predict" method="post" enctype="multipart/form-data">
-                                                <input type="file" id="wavfile" name="wavfile" accept=".wav" required>
+                                                <input type="file" id="audiofile" name="audiofile" accept=".wav,.mp3" required>
                                                 <input type="submit" class="welcome-btn new-cars-btn" value="Detect">
                                             </form>
 											<br>
 											
 											{% if prediction %}
 											<div class="" >   
-												<audio controls><source src="{{ audio_path}}" type="audio/wav" ></audio>
+												<audio controls>
+    												<source src="{{ url_for('static', filename='tests/' + audio_path.split('/')[-1]) }}">
+												</audio>
 											</div>                                             
 											</br>
 											</br>

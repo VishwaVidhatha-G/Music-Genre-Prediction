@@ -117,35 +117,43 @@ def predicts(image_data, model):
 
 @app.route('/predict', methods=['GET', 'POST'])
 def predict():
-    audio_path = request.files['wavfile']
-    print("audio_path", audio_path)
+    # 1. Get the file from the website
+    audio_file = request.files['audiofile']
+    
+    # 2. Save the original file (MP3 or WAV) to the tests folder
+    m_path = os.path.join('static/tests/', secure_filename(audio_file.filename))
+    audio_file.save(m_path)
+    
+    # 3. Handle MP3 or WAV conversion
+    # We use from_file because it handles both formats easily
+# Check if the file is an MP3
+    if m_path.lower().endswith(".mp3"):
+    # Convert MP3 to WAV using pydub
+        sound = AudioSegment.from_mp3(m_path)
+        sound.export("static/temp_converted.wav", format="wav")
+    # Load the newly created WAV file
+        wav = AudioSegment.from_wav("static/temp_converted.wav")
+    else:
+    # It is already a WAV, load it normally
+        wav = AudioSegment.from_wav(m_path)
 
-    # securedfile = audio_path.filename
-    # print("securedfile", securedfile)
-
-    input_mp3_file = "input.wav"
-    m_path = os.path.join('static/tests/', secure_filename(audio_path.filename))
-    print("m_path:", m_path)
-    audio_path.save(m_path)
-    time.sleep(6)
-
-    wav = AudioSegment.from_wav(m_path)
+# Now take the 10-second clip (from 40s to 50s)
     relevant_segment = wav[40 * 1000: 50 * 1000]
-    relevant_segment.export("static/extracted.wav", format='wav')
+    relevant_segment.export("static/extracted.wav", format="wav")
 
-    y,sr = librosa.load('static/extracted.wav', duration=3)
-    mels = librosa.feature.melspectrogram(y=y,sr=sr)
-    fig = plt.Figure()
-    canvas = FigureCanvas(fig)
-    p = plt.imshow(librosa.power_to_db(mels,ref=np.max))
+    # 5. Create the Mel Spectrogram (The Image for the AI)
+    y, sr = librosa.load('static/extracted.wav', duration=3)
+    mels = librosa.feature.melspectrogram(y=y, sr=sr)
+    plt.Figure()
+    plt.imshow(librosa.power_to_db(mels, ref=np.max))
     plt.savefig('static/melspectrogram.png')    
 
-    image_data = load_img('static/melspectrogram.png',color_mode='rgba',target_size=(288,432)) # Image.open('static/melspectrogram.png')
+    # 6. Feed the image to the AI model
+    image_data = load_img('static/melspectrogram.png', color_mode='rgba', target_size=(288, 432))
     class_label, prediction = predicts(image_data, model)
     genre = class_labels[class_label]
-    print("predict_result:", genre)
+    
     return render_template("genre_prediction.html", prediction=genre, audio_path=m_path)
-
 
 @app.route('/chart')
 def chart():
