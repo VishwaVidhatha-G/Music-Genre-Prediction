@@ -168,5 +168,10 @@ def chart():
 def performance():
 	return render_template('performance.html')
 
+## if __name__ == "__main__":
+##    app.run()
+
+## for hugging face deployment
 if __name__ == "__main__":
-    app.run()
+    # Hugging Face MUST use port 7860
+    app.run(host='0.0.0.0', port=7860)
