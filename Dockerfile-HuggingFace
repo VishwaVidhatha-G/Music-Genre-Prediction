@@ -1,0 +1,27 @@
+# Using Python 3.9
+FROM python:3.9
+
+# Create a user to avoid permission issues on Hugging Face
+RUN useradd -m -u 1000 user
+USER user
+ENV PATH="/home/user/.local/bin:$PATH"
+
+WORKDIR /app
+
+# Install system dependencies for audio
+USER root
+RUN apt-get update && apt-get install -y ffmpeg
+USER user
+
+# Copy and install requirements
+COPY --chown=user requirements.txt requirements.txt
+RUN pip install --no-cache-dir --upgrade -r requirements.txt
+
+# Copy the rest of the app
+COPY --chown=user . /app
+
+# Expose the mandatory port 7860
+EXPOSE 7860
+
+# Run with Gunicorn (The timeout 120 gives your AI time to think)
+CMD ["gunicorn", "--bind", "0.0.0.0:7860", "--timeout", "120", "app:app"]
